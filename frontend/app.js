@@ -1,5 +1,5 @@
 // Retell Web SDK Integration
-const BACKEND_URL = 'http://localhost:8000';
+const BACKEND_URL = 'https://law-production-a408.up.railway.app';
 
 let retellWebClient;
 let isCallActive = false;
