@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Retell SDK Fix Verification</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f0f9ff;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>SDK Fix Verification</h1>
+        <div id="status">Checking...</div>
+        <div id="details"></div>
+    </div>
+
+    <!-- Correct SDK URL -->
+    <script src="https://unpkg.com/retell-client-js-sdk/dist/index.umd.js"></script>
+
+    <script>
+        window.onload = function () {
+            const status = document.getElementById('status');
+            const details = document.getElementById('details');
+
+            try {
+                // Check Global Object
+                if (typeof window.retellClientJsSdk === 'undefined') {
+                    throw new Error('window.retellClientJsSdk is undefined');
+                }
+
+                details.innerHTML += '<div>✅ Global object found: window.retellClientJsSdk</div>';
+
+                // Check Class
+                const { RetellWebClient } = window.retellClientJsSdk;
+                if (!RetellWebClient) {
+                    throw new Error('RetellWebClient not found in global object');
+                }
+
+                details.innerHTML += '<div>✅ Class found: RetellWebClient</div>';
+
+                // Check Instantiation
+                const client = new RetellWebClient();
+                if (client) {
+                    details.innerHTML += '<div>✅ Client instantiated successfully</div>';
+                    status.innerHTML = '<h2 class="success">VERIFICATION PASSED! 🚀</h2>';
+                }
+
+            } catch (e) {
+                status.innerHTML = '<h2 class="error">VERIFICATION FAILED ❌</h2>';
+                details.innerHTML += `<div class="error">Error: ${e.message}</div>`;
+                console.error(e);
+            }
+        };
+    </script>
+</body>
+
+</html>

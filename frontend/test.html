@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retell SDK Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .test-section {
+            background: #16213e;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #0f3460;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #0f3460;
+            border-radius: 5px;
+        }
+
+        .success {
+            color: #10b981;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .info {
+            color: #3b82f6;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🧪 Retell SDK Test Page</h1>
+
+    <div class="test-section">
+        <h2>Test 1: SDK Loading</h2>
+        <button onclick="testSDKLoaded()">Check if SDK Loaded</button>
+        <div id="sdkStatus" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Backend Connection</h2>
+        <button onclick="testBackend()">Test Backend API</button>
+        <div id="backendStatus" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Initialize Client</h2>
+        <button onclick="testInitClient()">Initialize Retell Client</button>
+        <div id="clientStatus" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Start Call</h2>
+        <button onclick="testStartCall()">Start Test Call</button>
+        <button onclick="testEndCall()">End Call</button>
+        <div id="callStatus" class="status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div id="console" class="status"
+            style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <!-- Retell SDK -->
+    <script src="https://unpkg.com/retell-client-js-sdk@latest/dist/retell-client-js-sdk.umd.js"></script>
+
+    <script>
+        const BACKEND_URL = 'http://localhost:8000';
+        let retellClient = null;
+        let isCallActive = false;
+
+        // Console logger
+        function log(message, type = 'info') {
+            const consoleDiv = document.getElementById('console');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6';
+            consoleDiv.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+            console.log(message);
+        }
+
+        // Test 1: Check SDK
+        function testSDKLoaded() {
+            const statusDiv = document.getElementById('sdkStatus');
+            log('Testing SDK loading...');
+
+            if (typeof RetellWebClient !== 'undefined') {
+                statusDiv.innerHTML = '<span class="success">✅ SDK Loaded! Class: RetellWebClient</span>';
+                log('✅ SDK loaded successfully', 'success');
+                log('SDK type: ' + typeof RetellWebClient, 'info');
+            } else if (typeof window.RetellWebClient !== 'undefined') {
+                statusDiv.innerHTML = '<span class="success">✅ SDK Loaded! Class: window.RetellWebClient</span>';
+                log('✅ SDK loaded successfully (window)', 'success');
+            } else {
+                statusDiv.innerHTML = '<span class="error">❌ SDK Not Loaded</span>';
+                log('❌ SDK not loaded', 'error');
+                log('Available globals: ' + Object.keys(window).filter(k => k.toLowerCase().includes('retell')).join(', '), 'info');
+            }
+        }
+
+        // Test 2: Backend
+        async function testBackend() {
+            const statusDiv = document.getElementById('backendStatus');
+            log('Testing backend connection...');
+
+            try {
+                statusDiv.innerHTML = '<span class="info">⏳ Connecting to backend...</span>';
+
+                const response = await fetch(`${BACKEND_URL}/create-web-call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.innerHTML = '<span class="success">✅ Backend Connected! Got access token</span>';
+                    log('✅ Backend response: ' + JSON.stringify(data), 'success');
+                } else {
+                    statusDiv.innerHTML = '<span class="error">❌ Backend Error: ' + response.status + '</span>';
+                    log('❌ Backend error: ' + response.status, 'error');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="error">❌ Cannot reach backend: ' + error.message + '</span>';
+                log('❌ Backend error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 3: Initialize Client
+        function testInitClient() {
+            const statusDiv = document.getElementById('clientStatus');
+            log('Initializing Retell client...');
+
+            try {
+                if (typeof RetellWebClient === 'undefined') {
+                    statusDiv.innerHTML = '<span class="error">❌ SDK not loaded. Run Test 1 first.</span>';
+                    log('❌ SDK not loaded', 'error');
+                    return;
+                }
+
+                retellClient = new RetellWebClient();
+
+                retellClient.on('call_started', () => {
+                    log('📞 Call started!', 'success');
+                    isCallActive = true;
+                });
+
+                retellClient.on('call_ended', () => {
+                    log('📞 Call ended', 'info');
+                    isCallActive = false;
+                });
+
+                retellClient.on('error', (error) => {
+                    log('❌ Retell error: ' + JSON.stringify(error), 'error');
+                });
+
+                statusDiv.innerHTML = '<span class="success">✅ Client Initialized!</span>';
+                log('✅ Client initialized successfully', 'success');
+
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="error">❌ Init Error: ' + error.message + '</span>';
+                log('❌ Init error: ' + error.message, 'error');
+            }
+        }
+
+        // Test 4: Start Call
+        async function testStartCall() {
+            const statusDiv = document.getElementById('callStatus');
+            log('Starting call...');
+
+            if (!retellClient) {
+                statusDiv.innerHTML = '<span class="error">❌ Client not initialized. Run Test 3 first.</span>';
+                log('❌ Client not initialized', 'error');
+                return;
+            }
+
+            try {
+                statusDiv.innerHTML = '<span class="info">⏳ Getting access token...</span>';
+
+                const response = await fetch(`${BACKEND_URL}/create-web-call`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+                log('Got access token: ' + data.access_token.substring(0, 20) + '...', 'info');
+
+                statusDiv.innerHTML = '<span class="info">⏳ Starting call...</span>';
+
+                await retellClient.startCall({
+                    accessToken: data.access_token,
+                    sampleRate: 24000,
+                    captureDeviceId: 'default',
+                    playbackDeviceId: 'default',
+                });
+
+                statusDiv.innerHTML = '<span class="success">✅ Call Started! Speak now.</span>';
+                log('✅ Call started successfully!', 'success');
+
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="error">❌ Call Error: ' + error.message + '</span>';
+                log('❌ Call error: ' + error.message, 'error');
+            }
+        }
+
+        function testEndCall() {
+            if (retellClient && isCallActive) {
+                retellClient.stopCall();
+                log('Ending call...', 'info');
+            }
+        }
+
+        // Auto-run Test 1 on load
+        window.addEventListener('load', () => {
+            log('Page loaded', 'success');
+            setTimeout(() => {
+                testSDKLoaded();
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
