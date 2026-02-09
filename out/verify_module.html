@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Retell SDK Module Verification</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f0f9ff;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>SDK Module Verification</h1>
+        <div id="status">Checking...</div>
+        <div id="details"></div>
+    </div>
+
+    <!-- ES Module Loading -->
+    <script type="module">
+        try {
+            import { RetellWebClient } from "https://cdn.skypack.dev/retell-client-js-sdk@latest";
+
+            const details = document.getElementById('details');
+            const status = document.getElementById('status');
+
+            details.innerHTML += '<div>✅ Module imported successfully</div>';
+
+            if (RetellWebClient) {
+                details.innerHTML += '<div>✅ RetellWebClient class found</div>';
+
+                const client = new RetellWebClient();
+                details.innerHTML += '<div>✅ Client instantiated successfully</div>';
+                status.innerHTML = '<h2 class="success">VERIFICATION PASSED! 🚀</h2>';
+            } else {
+                throw new Error('RetellWebClient export is missing');
+            }
+
+        } catch (e) {
+            const status = document.getElementById('status');
+            const details = document.getElementById('details');
+            status.innerHTML = '<h2 class="error">VERIFICATION FAILED ❌</h2>';
+            details.innerHTML += `<div class="error">Error: ${e.message}</div>`;
+            console.error(e);
+        }
+    </script>
+</body>
+
+</html>

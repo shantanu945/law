@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LawRato - AI Receptionist Demo</title>
+    <meta name="description"
+        content="Experience Aria, LawRato's intelligent AI receptionist providing 24/7 legal assistance">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+
+        <div class="container">
+            <div class="hero-content">
+                <div class="logo">
+                    <h1>LawRato</h1>
+                    <span class="tagline">Legal Solutions Made Simple</span>
+                </div>
+
+                <div class="hero-text">
+                    <h2 class="hero-title">
+                        Meet <span class="highlight">Aria</span>
+                        <br>Your AI Legal Assistant
+                    </h2>
+                    <p class="hero-description">
+                        Experience the future of legal assistance with our intelligent AI receptionist.
+                        Available 24/7 to connect you with expert lawyers, answer your legal questions,
+                        and guide you through LawRato's comprehensive services.
+                    </p>
+                </div>
+
+                <div class="cta-section">
+                    <button id="startCallBtn" class="cta-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="phone-icon">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                        <div>
+                            <span>Talk to Aria Now</span>
+                            <div class="cta-subtext"
+                                style="margin-top: 0; font-size: 0.75rem; font-weight: normal; opacity: 0.8;">Click to
+                                start conversation</div>
+                        </div>
+                    </button><!-- Call Status Display -->
+                    <div id="callStatus" class="call-status hidden">
+                        <div class="status-indicator">
+                            <div class="pulse-ring"></div>
+                            <div class="pulse-ring"></div>
+                            <div class="pulse-dot"></div>
+                        </div>
+                        <p id="statusText">Connecting...</p>
+                        <button id="endCallBtn" class="end-call-button">End Call</button>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h3 class="section-title">Why Choose Aria?</h3>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h4>Multilingual Support</h4>
+                    <p>Seamlessly switch between English and Hindi for your convenience</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Instant Connection</h4>
+                    <p>Get connected to the right legal expert in seconds, not hours</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Expert Guidance</h4>
+                    <p>Navigate through family law, property, criminal cases, and more</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h4>Secure & Private</h4>
+                    <p>Your legal matters are handled with complete confidentiality</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h4>24/7 Availability</h4>
+                    <p>Legal assistance whenever you need it, day or night</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <h4>Comprehensive Services</h4>
+                    <p>From consultations to legal documentation, we've got you covered</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <h3 class="section-title">LawRato Services</h3>
+            <p class="section-subtitle">Aria can help you navigate all our legal services</p>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <h4>👨‍⚖️ Talk to a Lawyer</h4>
+                    <p>Direct consultation with top-rated lawyers across India</p>
+                </div>
+
+                <div class="service-card">
+                    <h4>❓ Free Legal Questions</h4>
+                    <p>Post your query and get expert responses</p>
+                </div>
+
+                <div class="service-card">
+                    <h4>🔍 Lawyer Search</h4>
+                    <p>Find specialists in your city for any legal matter</p>
+                </div>
+
+                <div class="service-card">
+                    <h4>📄 Legal Documentation</h4>
+                    <p>Wills, POA, rental agreements, and more</p>
+                </div>
+
+                <div class="service-card">
+                    <h4>🏢 Corporate Solutions</h4>
+                    <p>Specialized legal panels for businesses</p>
+                </div>
+
+                <div class="service-card">
+                    <h4>📞 Direct Support</h4>
+                    <p>Call +91 9599 000 555 for immediate assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 LawRato. All rights reserved.</p>
+            <p class="footer-note">Powered by Advanced AI Technology</p>
+        </div>
+    </footer>
+
+    <!-- Retell Web SDK -->
+    <script type="module">
+        import { RetellWebClient } from "https://cdn.skypack.dev/retell-client-js-sdk@latest";
+        window.RetellWebClient = RetellWebClient; // Make it available globally for app.js
+        console.log('✅ Retell SDK loaded via Module');
+    </script>
+    <script src="app.js" defer></script>
+</body>
+
+</html>
